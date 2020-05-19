@@ -241,15 +241,16 @@ app.post('/login', async (req, res) => {
         // sign the jwt token
         token = jwt.sign({ email: event_user.email }, process.env.APP_SECRET);
 
-		// Get user type
-		let user_type = event_users[0].user_type;	
+        // Get user type
+        let user_type = event_users[0].user_type;	
+
         // send the response
         res.send({
           status: `success`,
           message: `Logged in`,
           email: event_user.email,
           auth_token: token,
-		  user_type:user_type
+		      user_type:user_type
         });
   
       }
@@ -304,7 +305,7 @@ app.post('/signup',  async (req, res) => {
         message: `registerd successfully`,
         email: event_user.email,
         auth_token: token,
-		user_type:userType
+		    user_type:event_user.user_type
 
       });
   
