@@ -341,7 +341,7 @@ app.post('/book-event',  async (req, res) => {
       // get the user token from the header
       let token = req.headers.authorization || '';
 
-      let email = await authorizedUser(token)
+      let email = await authorizedUser(token);
       
       let users = await EventUsersModel.find({email});
 
@@ -355,11 +355,29 @@ app.post('/book-event',  async (req, res) => {
       }
       else
       try {
-           
+          
+        let id = await req.body._id;
+
+        let bookedEvent = await BookedEventsModel.find({id, email});
+        
+        if(bookedEvent.length >=1){
+          res.send({
+            status: `failed`,
+            message: `This event is alredy booked.`
+          });
+        }
+        else {
+
         const event = req.body;
         //console.log(`Event: ${JSON.stringify(event)}`);
        
+        //set email
         event.email = email;
+        
+        //get id, assign as booking Id and delete
+        const id = event._id;
+        delete event._id;
+        event.id= id;
 
         const eventsSchema = new BookedEventsModel(event);
         
@@ -370,6 +388,7 @@ app.post('/book-event',  async (req, res) => {
           status: `success`,
           message: `Event booked with title ${event.title}`
         });
+      }
         
       } catch (error) {
         res.send({
@@ -387,7 +406,7 @@ app.post('/book-event',  async (req, res) => {
 
   }
 
-
+  
 });
 
 
