@@ -63,6 +63,32 @@ app.post('/api/search-event', async (req, res) => {
   
 });
 
+// Search bookings
+
+app.post('/api/search-bookings', async (req, res) => {
+
+  console.log("inside /api/search-bookings");
+
+  try {
+    let conditions = {to_date: { $gte: 20200511 }};
+    console.log(`search conditions: ${JSON.stringify(conditions)}`);
+    
+    // let events = await EventsModel.find({}, null, {});
+    const bookings = await BookedEventsModel.find(conditions).sort({ title: 1 });
+    //const totalAmount = await BookedEventsModel.find({ $sum : price });
+
+    res.send(bookings);
+    //res.json({ bookings: bookings,totalAmount:totalAmount })
+    
+  } catch (error) {
+
+    console.log(`Search bookings Error: ${error}`);
+    res.send(error);
+
+  }
+  
+});
+
 
 
 //-----add event
@@ -356,9 +382,9 @@ app.post('/book-event',  async (req, res) => {
       else
       try {
           
-        let id = await req.body._id;
+        //let id = await req.body._id;
 
-        let bookedEvent = await BookedEventsModel.find({id, email});
+/*         let bookedEvent = await BookedEventsModel.find({id, email});
         
         if(bookedEvent.length >=1){
           res.send({
@@ -367,17 +393,22 @@ app.post('/book-event',  async (req, res) => {
           });
         }
         else {
-
+ */
         const event = req.body;
-        //console.log(`Event: ${JSON.stringify(event)}`);
-       
-        //set email
-        event.email = email;
         
         //get id, assign as booking Id and delete
         const id = event._id;
+        
         delete event._id;
         event.id= id;
+        
+        await delete users[0].password;
+        event.customer = users[0];
+
+        //set email
+        event.email = email;        
+        
+        //console.log(`[book-event] Event: ${JSON.stringify(event.email)}`);
 
         const eventsSchema = new BookedEventsModel(event);
         
@@ -388,7 +419,7 @@ app.post('/book-event',  async (req, res) => {
           status: `success`,
           message: `Event booked with title ${event.title}`
         });
-      }
+      //}
         
       } catch (error) {
         res.send({
@@ -436,9 +467,11 @@ app.post('/search-booked-events',  async (req, res) => {
         let conditions = req.body || {};
         
         conditions.email = email;
-        //console.log(`Conditions: ${JSON.stringify(conditions)}`);
+        //console.log(`[search-booked-events] conditions: ${JSON.stringify(conditions)}`);
 
         const events = await BookedEventsModel.find(conditions).sort({ title: 1 });
+        
+        //console.log(`[search-booked-events] events: ${events.length}`);
 
         res.send(events);
         

@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
 const bookedEventsSchema = new mongoose.Schema({
-    email: {
-        type: String,
+    customer: {
+        type: Object,
         required: true
     },
+    email:{
+		type:String,
+		required: true
+	},
 	id:{
 		type:String,
 		required: true
@@ -69,7 +73,12 @@ const bookedEventsSchema = new mongoose.Schema({
         terms:{
             type:String
         }
-    }
+    },
+    payment_id:{
+		type:String,
+		required: true
+	}
+
 })
 
 module.exports = mongoose.model('bookedEvents',bookedEventsSchema, `bookedEvents`);
