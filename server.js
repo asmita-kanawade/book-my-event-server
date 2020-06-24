@@ -46,7 +46,7 @@ app.post('/api/search-event', async (req, res) => {
   console.log("inside /api/search-event");
 
   try {
-    let conditions = {to_date: { $gte: 20200511 }};
+    let conditions = {to_date: { $gte: 20200511 }, _id: '5ecc8aad27b6ed0017c49fef'};
     console.log(`search conditions: ${JSON.stringify(conditions)}`);
     
     // let events = await EventsModel.find({}, null, {});
