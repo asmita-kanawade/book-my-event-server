@@ -375,6 +375,8 @@ app.post('/book-event',  async (req, res) => {
       // get the user token from the header
       let token = req.headers.authorization || '';
 
+      let booking_date = req.headers.booking_date;
+
       let email = await authorizedUser(token);
       
       let users = await EventUsersModel.find({email});
@@ -409,6 +411,7 @@ app.post('/book-event',  async (req, res) => {
         
         delete event._id;
         event.id= id;
+        event.booking_date = booking_date;
         
         await delete users[0].password;
         event.customer = users[0];

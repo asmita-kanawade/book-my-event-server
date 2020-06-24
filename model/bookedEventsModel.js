@@ -77,6 +77,10 @@ const bookedEventsSchema = new mongoose.Schema({
     payment_id:{
 		type:String,
 		required: true
+    },
+    booking_date:{
+		type:Date,
+		required: true
 	}
 
 })
