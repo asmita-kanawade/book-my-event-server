@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-// enable cors
+// enable cors 
 app.use(cors());
 
 /*Render HTML */
